@@ -11,10 +11,12 @@ import Profile from './pages/Profile/Profile';
 import Users from './pages/Users/Users';
 import Admin from './pages/Admin/Admin';
 import NotFound from './pages/NotFound/NotFound';
-
+import Authorize from './pages/Authorize/Authorize';
 import Loader from './components/Loader/Loader';
 
 import { logInUserWithOauth, loadMe } from './store/actions/authActions';
+import CaseList from './pages/Case/CaseList';
+import AddCase from './pages/Case/AddCase';
 
 const App = ({ logInUserWithOauth, auth, loadMe }) => {
   useEffect(() => {
@@ -47,6 +49,9 @@ const App = ({ logInUserWithOauth, auth, loadMe }) => {
           <Route path="/users" component={Users} />
           <Route path="/notfound" component={NotFound} />
           <Route path="/admin" component={Admin} />
+          <Route path="/authorize" component={Authorize} />
+          <Route path="/caselist" component={CaseList} />
+          <Route path="/addcase" component={AddCase} />
           <Route exact path="/:username" component={Profile} />
           <Route exact path="/" component={Home} />
           <Route component={NotFound} />

@@ -44,14 +44,12 @@ const Home = ({ auth, reseedDatabase }) => {
                 Register
               </Link>
             </p>
-            <ReseedMessage handleReseed={handleReseed} />
           </div>
         ) : (
           <>
             <p>
               Welcome <span className="name">{auth.me.name}</span>!
             </p>
-            <ReseedMessage handleReseed={handleReseed} />
             <MessageForm />
           </>
         )}

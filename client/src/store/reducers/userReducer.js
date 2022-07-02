@@ -8,6 +8,8 @@ import {
   DELETE_USER_LOADING,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
+  GET_SEARCH_SUCCESS,
+  GET_SEARCH_FAIL,
 } from '../types';
 
 const initialState = {
@@ -25,6 +27,12 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         isLoading: true,
         error: null,
+      };
+    case GET_SEARCH_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        searchProfile: payload.searchProfile,
       };
     case GET_PROFILE_SUCCESS:
       return {

@@ -21,9 +21,26 @@ const Navbar = ({ auth, logOutUser, history }) => {
         </li>
         {auth.isAuthenticated ? (
           <>
-            <li className="nav-item">
-              <Link to="/users">Users</Link>
-            </li>
+            {auth.me?.role === 'ADMIN' && (
+              <li className="nav-item">
+                <Link to="/users">Users</Link>
+              </li>
+            )}
+            {auth.me?.role === 'ADMIN' && (
+              <li className="nav-item">
+                <Link to="/authorize">Authorize</Link>
+              </li>
+            )}
+            {auth.me?.role === 'HR' && (
+              <li className="nav-item">
+                <Link to="/caselist">CaseList</Link>
+              </li>
+            )}
+            {auth.me?.role === 'HR' && (
+              <li className="nav-item">
+                <Link to="/addcase">AddCase</Link>
+              </li>
+            )}
             <li className="nav-item">
               <Link to={`/${auth.me.username}`}>Profile</Link>
             </li>

@@ -2,6 +2,9 @@ import axios from 'axios';
 
 import { attachTokenToHeaders } from './authActions';
 import {
+  GET_SEARCH_LOADING,
+  GET_SEARCH_SUCCESS,
+  GET_SEARCH_FAIL,
   GET_PROFILE_LOADING,
   GET_PROFILE_SUCCESS,
   GET_PROFILE_FAIL,
@@ -37,6 +40,28 @@ export const editUser = (id, formData, history) => async (dispatch, getState) =>
     });
   }
 };
+export const editUserRole = (id, role, history) => async (dispatch, getState) => {
+  dispatch({
+    type: EDIT_USER_LOADING,
+  });
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.put(`/api/users/updateUserRole/${id}/${role}`, { role }, options);
+
+    dispatch({
+      type: GET_SEARCH_SUCCESS,
+      payload: { searchProfile: response.data.user },
+    });
+    // edited him self, reload me
+    // if (getState().auth.me?.id === response.data.user.id) dispatch(loadMe());
+    // history.push(`/${response.data.user.username}`);
+  } catch (err) {
+    dispatch({
+      type: EDIT_USER_FAIL,
+      payload: { error: err?.response?.data.message || err.message },
+    });
+  }
+};
 
 export const getProfile = (username, history) => async (dispatch, getState) => {
   dispatch({
@@ -56,6 +81,27 @@ export const getProfile = (username, history) => async (dispatch, getState) => {
     }
     dispatch({
       type: GET_PROFILE_FAIL,
+      payload: { error: err?.response?.data.message || err.message },
+    });
+  }
+};
+export const searchUser = (username, history) => async (dispatch, getState) => {
+  dispatch({
+    type: GET_SEARCH_LOADING,
+  });
+  try {
+    const options = attachTokenToHeaders(getState);
+    const response = await axios.get(`/api/users/${username}`, options);
+    dispatch({
+      type: GET_SEARCH_SUCCESS,
+      payload: { searchProfile: response.data.user },
+    });
+  } catch (err) {
+    if (err?.response.status === 404) {
+      history.push('/notfound');
+    }
+    dispatch({
+      type: GET_SEARCH_FAIL,
       payload: { error: err?.response?.data.message || err.message },
     });
   }

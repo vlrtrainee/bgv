@@ -71,6 +71,30 @@ router.put('/:id', [requireJwtAuth, upload.single('avatar')], async (req, res, n
     res.status(500).json({ message: 'Something went wrong.' });
   }
 });
+router.put('/updateUserRole/:id/:role', requireJwtAuth, async (req, res, next) => {
+  try {
+    const tempUser = await User.findById(req.params.id);
+    //console.log('tempuser::', tempUser);
+
+    if (!tempUser) return res.status(404).json({ message: 'No such user.' });
+    if (!req.user.role === 'ADMIN')
+      return res.status(400).json({ message: 'You do not have privilegies to edit this user.' });
+
+    // const existingUser = await User.findOne({ username: req.body.username });
+    // if (existingUser && existingUser.id !== tempUser.id) {
+    //   return res.status(400).json({ message: 'Username alredy taken.' });
+    // }
+
+    const updatedUser = { role: req.params.role };
+    // // remove '', null, undefined
+    // Object.keys(updatedUser).forEach((k) => !updatedUser[k] && updatedUser[k] !== undefined && delete updatedUser[k]);
+    console.log('updatedUser', updatedUser);
+    const user = await User.findByIdAndUpdate(tempUser.id, { $set: updatedUser }, { new: true });
+    res.status(200).json({ user });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
 
 router.get('/reseed', async (req, res) => {
   await seedDb();
